@@ -1,4 +1,3 @@
--- Initialize graphics
 term.setBackgroundColor(colors.white)
 term.clear()
 term.setTextColor(colors.gray)
@@ -9,11 +8,9 @@ local function drawProgressBar(percent)
     local barWidth = 30
     local progress = math.floor(barWidth * percent)
 
-    -- Center text
     term.setCursorPos((w - #"Loading APPMANAGER.lua") / 2, h / 2 - 2)
     write("Loading APPMANAGER.lua")
 
-    -- Draw progress bar
     term.setCursorPos((w - barWidth) / 2, h / 2)
     term.write("[")
     term.setBackgroundColor(colors.lightGray)
@@ -27,10 +24,8 @@ local function main()
     local url = "https://raw.githubusercontent.com/Vide0Master/vmtech-computercraft-apps/main/APPMANAGER.lua"
     local file_path = "/rom/APPMANAGER.lua"
 
-    -- Initial draw
     drawProgressBar(0)
 
-    -- Download file
     local response = http.get(url)
     if not response then
         term.setCursorPos(1, 20)
@@ -42,7 +37,6 @@ local function main()
     local content = response.readAll()
     response.close()
 
-    -- Save with progress
     local file = fs.open(file_path, "w")
     local total = #content
     local written = 0
@@ -55,7 +49,6 @@ local function main()
 
     file.close()
 
-    -- Launch
     term.setBackgroundColor(colors.black)
     term.clear()
     term.setCursorPos(1, 1)
