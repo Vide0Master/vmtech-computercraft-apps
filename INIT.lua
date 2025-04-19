@@ -64,7 +64,7 @@ local function main()
 
     -- Launch
     term.clear()
-    shell.run(file_path:match("(.+)%..+$"))
+    shell.run('APPMANAGER')
 end
 
 main()
