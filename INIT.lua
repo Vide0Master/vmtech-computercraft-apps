@@ -21,7 +21,7 @@ local function drawProgressBar(percent)
 end
 
 local function main()
-    local url = "https://raw.githubusercontent.com/Vide0Master/vmtech-computercraft-apps/main/APPMANAGER.lua"
+    local url = "https://raw.githubusercontent.com/Vide0Master/vmtech-computercraft-apps/refs/heads/main/APPMANAGER.lua"
     local file_path = "/rom/APPMANAGER.lua"
 
     drawProgressBar(0)
