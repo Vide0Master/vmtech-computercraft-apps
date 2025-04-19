@@ -23,8 +23,7 @@ local function main()
     file.close()
 
     print("Launching APPMANAGER...")
-    shell.setDir('./')
-    shell.run(file_path)
+    os.run({_G},'APPMANAGER.lua')
 end
 
 main()
