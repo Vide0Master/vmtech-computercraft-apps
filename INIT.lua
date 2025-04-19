@@ -1,21 +1,65 @@
+-- Инициализация графики
+term.setBackgroundColor(colors.white)
+term.clear()
+term.setTextColor(colors.gray)
+term.setCursorPos(1, 1)
 
-local url = "https://raw.githubusercontent.com/Vide0Master/vmtech-computercraft-apps/refs/heads/main/APPMANAGER.lua"
-local file_path = "/rom/APPMANAGER.lua"
-
-local response = http.get(url)
-if not response then
-    print("Ошибка подключения к GitHub")
-    return
+local function drawProgressBar(percent)
+    local w, h = term.getSize()
+    local barWidth = 30
+    local progress = math.floor(barWidth * percent)
+    
+    -- Центрируем текст
+    term.setCursorPos((w - #"Загрузка APPMANAGER.lua")/2, h/2 - 2)
+    write("Загрузка APPMANAGER.lua")
+    
+    -- Рисуем полосу прогресса
+    term.setCursorPos((w - barWidth)/2, h/2)
+    term.write("[")
+    term.setBackgroundColor(colors.lightGray)
+    term.write((" "):rep(progress))
+    term.setBackgroundColor(colors.white)
+    term.write((" "):rep(barWidth - progress))
+    term.write("]")
 end
 
-local content = response.readAll()
-response.close()
+local function main()
+    local url = "https://raw.githubusercontent.com/Vide0Master/vmtech-computercraft-apps/main/APPMANAGER.lua"
+    local file_path = "/rom/APPMANAGER.lua"
+    
+    -- Первоначальная отрисовка
+    drawProgressBar(0)
+    
+    -- Загрузка файла
+    local response = http.get(url)
+    if not response then
+        term.setCursorPos(1, 20)
+        term.setTextColor(colors.red)
+        print("Ошибка подключения!")
+        return
+    end
+    
+    local content = response.readAll()
+    response.close()
+    
+    -- Сохранение с прогрессом
+    local file = fs.open(file_path, "w")
+    local total = #content
+    local written = 0
+    
+    for i = 1, total, 100 do
+        file.write(content:sub(i, i + 99))
+        written = written + 100
+        drawProgressBar(math.min(written/total, 1))
+    end
+    
+    file.close()
+    
+    -- Запуск
+    term.setBackgroundColor(colors.black)
+    term.clear()
+    term.setCursorPos(1, 1)
+    shell.run(file_path)
+end
 
-local file = fs.open(file_path, "w")
-file.write(content)
-file.close()
-
-print("Файл сохранён в "..file_path)
-
--- Запускаем сохранённый файл
-shell.run(file_path)
+main()
