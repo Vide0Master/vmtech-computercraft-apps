@@ -1,4 +1,4 @@
--- Инициализация графики
+-- Initialize graphics
 term.setBackgroundColor(colors.white)
 term.clear()
 term.setTextColor(colors.gray)
@@ -8,13 +8,13 @@ local function drawProgressBar(percent)
     local w, h = term.getSize()
     local barWidth = 30
     local progress = math.floor(barWidth * percent)
-    
-    -- Центрируем текст
-    term.setCursorPos((w - #"Загрузка APPMANAGER.lua")/2, h/2 - 2)
-    write("Загрузка APPMANAGER.lua")
-    
-    -- Рисуем полосу прогресса
-    term.setCursorPos((w - barWidth)/2, h/2)
+
+    -- Center text
+    term.setCursorPos((w - #"Loading APPMANAGER.lua") / 2, h / 2 - 2)
+    write("Loading APPMANAGER.lua")
+
+    -- Draw progress bar
+    term.setCursorPos((w - barWidth) / 2, h / 2)
     term.write("[")
     term.setBackgroundColor(colors.lightGray)
     term.write((" "):rep(progress))
@@ -26,36 +26,36 @@ end
 local function main()
     local url = "https://raw.githubusercontent.com/Vide0Master/vmtech-computercraft-apps/main/APPMANAGER.lua"
     local file_path = "/rom/APPMANAGER.lua"
-    
-    -- Первоначальная отрисовка
+
+    -- Initial draw
     drawProgressBar(0)
-    
-    -- Загрузка файла
+
+    -- Download file
     local response = http.get(url)
     if not response then
         term.setCursorPos(1, 20)
         term.setTextColor(colors.red)
-        print("Ошибка подключения!")
+        print("Connection error!")
         return
     end
-    
+
     local content = response.readAll()
     response.close()
-    
-    -- Сохранение с прогрессом
+
+    -- Save with progress
     local file = fs.open(file_path, "w")
     local total = #content
     local written = 0
-    
+
     for i = 1, total, 100 do
         file.write(content:sub(i, i + 99))
         written = written + 100
-        drawProgressBar(math.min(written/total, 1))
+        drawProgressBar(math.min(written / total, 1))
     end
-    
+
     file.close()
-    
-    -- Запуск
+
+    -- Launch
     term.setBackgroundColor(colors.black)
     term.clear()
     term.setCursorPos(1, 1)
