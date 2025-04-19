@@ -3,6 +3,7 @@ term.clear()
 term.setTextColor(colors.gray)
 term.setCursorPos(1, 1)
 
+--progress bar
 local function drawProgressBar(percent)
     local w, h = term.getSize()
     local barWidth = 30
