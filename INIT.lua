@@ -63,10 +63,8 @@ local function main()
     file.close()
 
     -- Launch
-    term.setBackgroundColor(colors.black)
     term.clear()
-    term.setCursorPos(1, 1)
-    shell.run(file_path)
+    shell.run(file_path:match("(.+)%..+$"))
 end
 
 main()
